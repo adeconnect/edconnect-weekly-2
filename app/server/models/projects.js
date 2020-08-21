@@ -1,5 +1,12 @@
 class Project {
-
+    constructor(title, abstract, authors, tags, user_id){
+        this.title = title; 
+        this.abstract = abstract; 
+        this.authors = authors;
+        this.tags = tags;
+        this.user_id = user_id;
+        this.is = generate_random_id();
+    }
 }
 
 class Projects {
