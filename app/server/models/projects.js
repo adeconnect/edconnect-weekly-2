@@ -1,3 +1,6 @@
+const DataModel = require('./data_model');
+const util = require('../utils');
+
 class Project {
     constructor(title, abstract, authors, tags, user_id){
         this.title = title; 
