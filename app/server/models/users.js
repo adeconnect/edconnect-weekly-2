@@ -41,6 +41,37 @@ class Users extends DataModel {
 
         return false;       
     }
+
+    validPassword(password){
+        if(!password.match(/^[0-9a-z]+$/)){
+            return false;
+        }
+        if(password.length < 7){
+            return false;
+        }
+
+        return true;
+    }
+
+    validate(obj){
+        let errors = [];
+        for (const property in obj) {
+            if(obj[property] === ""){
+                errors.push(`${property} should not be empty`)
+            }
+        }
+
+        let user = this.getByEmail(obj.email);
+        if (user !== false){
+            errors.push(`A user with email address ${obj.email} already exists`);
+        }
+
+        if(!this.validPassword()){
+            errors.push('Your password should be alphanumeric and have at least 7 characters');
+        }
+
+        return errors;
+    }
 }
 
 class Student extends User {
@@ -53,25 +84,28 @@ class Student extends User {
     }
 }
 
-class Students extends DataModel {
+class Students extends Users {
     
     add(obj){
-        let errors = [];
-        for (const property in obj) {
-            if(obj[property] === ""){
-                errors.push(`${property} should not be empty`)
-            }
-        }
-
-        let student = this.getByEmail(obj.email);
-        if (student !== false){
-            errors.push(`A user with email address ${obj.email} already exists`);
-        }
+        let errors = this.validate(obj);
 
         student = this.getByMatricNumber(obj.matric_number);
         if (student !== false){
             errors.push(`A user with matric number ${obj.matric_number} already exists`);
         }
+
+        if(errors.length == 0){
+            let user = new User(obj.first_name, obj.last_name, obj.email, obj.password);
+            return {
+                "status" : "success",
+                "data" : user
+            };
+        }
+
+        return {
+            "status" : "error",
+            "errors" :errors
+        };
     }
  
     getByMatricNumber(matric_number){
