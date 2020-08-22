@@ -1,5 +1,5 @@
 function generate_random_id(){
-    return  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return  Math.random().toString(36).substring(2);
 }
 
 // Do not worry about the below for now; It is included so that we can test your code
